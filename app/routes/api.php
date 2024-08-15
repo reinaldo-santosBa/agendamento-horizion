@@ -5,6 +5,12 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
+Route::get('/teste', function () {
+    return response()->json([
+        'message' => 'Teste',
+    ]);
+});
+
 //auth
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
