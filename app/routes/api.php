@@ -1,19 +1,26 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AgendamentoController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+//auth
+Route::post('login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//users
+Route::post('users', [UserController::class, 'store']);
+Route::middleware('auth:sanctum')->get('users/pacientes', [UserController::class, 'getUsuariosTipoP']);
+Route::middleware('auth:sanctum')->get('users', [UserController::class, 'index']);
+Route::middleware('auth:sanctum')->get('users/{id}', [UserController::class, 'show']);
+Route::delete('users/{id}', [UserController::class, 'destroy']);
+Route::put('users/{id}', [UserController::class, 'update']);
+
+//agendamentos
+Route::middleware('auth:sanctum')->get('agendamentos/{id}', [AgendamentoController::class, 'show']);
+Route::middleware('auth:sanctum')->post('agendamentos', [AgendamentoController::class, 'store']);
+Route::middleware('auth:sanctum')->get('agendamentos', [AgendamentoController::class, 'getAll']);
+Route::middleware('auth:sanctum')->put('agendamentos/{id}', [AgendamentoController::class, 'update']);
+Route::middleware('auth:sanctum')->get('/agendamentos', [AgendamentoController::class, 'filterByDate']);
+Route::middleware('auth:sanctum')->get('/agendamentos/usuario/todos', [AgendamentoController::class, 'getByUsuarioId']);
